@@ -4,10 +4,48 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+        flatDir {
+            dirs 'libs'
+        }
+        //Anythink(Core)
+        maven {
+            url "https://anythink.jfrog.io/artifactory/android_sdk"
+        }
+
+        //Vungle
+        maven {
+            url "https://s01.oss.sonatype.org/content/groups/staging/"
+        }
+
+        //Ironsource
+        maven {
+            url "https://android-sdk.is.com/"
+        }
+
+        //Pangle
+        maven {
+            url "https://artifact.bytedance.com/repository/pangle"
+        }
+
+        //Mintegral
+        maven {
+            url "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea"
+        }
+
+        //Chartboost
+        maven {
+            url "https://cboost.jfrog.io/artifactory/helium"
+        }
+
+        //Ironsource
+        maven {
+            url "https://android-sdk.is.com/"
+        }
+
+
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.0'
+        classpath 'com.android.tools.build:gradle:4.0.1'
         
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -18,7 +56,45 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+        flatDir {
+            dirs 'libs'
+        }
+        //Anythink(Core)
+        maven {
+            url "https://anythink.jfrog.io/artifactory/android_sdk"
+        }
+
+        //Vungle
+        maven {
+            url "https://s01.oss.sonatype.org/content/groups/staging/"
+        }
+
+        //Ironsource
+        maven {
+            url "https://android-sdk.is.com/"
+        }
+
+        //Pangle
+        maven {
+            url "https://artifact.bytedance.com/repository/pangle"
+        }
+
+        //Mintegral
+        maven {
+            url "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea"
+        }
+
+        //Chartboost
+        maven {
+            url "https://cboost.jfrog.io/artifactory/helium"
+        }
+
+        //Ironsource
+        maven {
+            url "https://android-sdk.is.com/"
+        }
+
+
     }
 }
 

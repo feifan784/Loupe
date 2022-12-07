@@ -6,31 +6,88 @@ import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.anythink.core.api.ATAdInfo;
+import com.anythink.core.api.AdError;
+import com.anythink.splashad.api.ATSplashAd;
+import com.anythink.splashad.api.ATSplashAdExtraInfo;
+import com.anythink.splashad.api.ATSplashAdListener;
 import com.github.zackratos.ultimatebar.UltimateBar;
-import com.loupe.project.camare.TimerUtils;
 
 @SuppressLint("CustomSplashScreen")
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity implements ATSplashAdListener {
+
+    private boolean needShowSplashAd;
+    private ConstraintLayout consRoot;
+
+    private ATSplashAd splashAd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        consRoot = findViewById(R.id.consRoot);
         initStatusBar();
 
-        //倒计时1秒
-        TimerUtils.getInstance().startTimer(1111, 1, 0, 1000);
+        loadAd();
 
-        TimerUtils.getInstance().setOnSplashFinishInterface(new TimerUtils.OnSplashFinishInterface() {
-            @Override
-            public void onSplashTimerBack() {
-                //1秒后回调
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
+    }
+
+    private void jumpToMainActivity() {
+        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void loadAd() {
+        String defaultConfig = "";
+
+        //设置首次开屏广告广告源，请从TopOn后台兜底开屏广告源导出配置
+        /*defaultConfig = "{\"unit_id\":1442678,\"nw_firm_id\":15,\"adapter_class\":\"com.anythink.network.toutiao.TTATSplashAdapter\",\"content\":\"{\\\"button_type\\\":\\\"0\\\",\\\"dl_type\\\":\\\"0\\\",\\\"slot_id\\\":\\\"100011\\\",\\\"personalized_template\\\":\\\"0\\\",\\\"zoomoutad_sw\\\":\\\"1\\\",\\\"app_id\\\":\\\"5001121\\\"}\"}";*/
+        splashAd = new ATSplashAd(this, "b631877cd74a52", this, 5000, defaultConfig);
+        if (splashAd.isAdReady()) {
+//            FirebaseAnalyticsManager.logEvent(FirebaseAnalyticsManager.Sp_Show);
+            splashAd.show(this, consRoot);
+        } else {
+            splashAd.loadAd();
+        }
+    }
+
+    @Override
+    public void onAdLoaded(boolean b) {
+        if (AppOpenManager.tempCl) {
+            loadAd();
+        } else {
+            jumpToMainActivity();
+        }
+    }
+
+    @Override
+    public void onAdLoadTimeout() {
+        jumpToMainActivity();
+    }
+
+    @Override
+    public void onNoAdError(AdError adError) {
+        jumpToMainActivity();
+    }
+
+    @Override
+    public void onAdShow(ATAdInfo atAdInfo) {
+
+    }
+
+    @Override
+    public void onAdClick(ATAdInfo atAdInfo) {
+
+    }
+
+    @Override
+    public void onAdDismiss(ATAdInfo atAdInfo, ATSplashAdExtraInfo atSplashAdExtraInfo) {
+
     }
 
     private void initStatusBar() {
@@ -46,5 +103,11 @@ public class SplashActivity extends AppCompatActivity {
 
         //状态内容颜色
         CommonLoupeSetUtils.onlyLoupeLightStatusbarTextDark(this.getWindow(), false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 }
