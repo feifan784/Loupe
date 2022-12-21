@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -38,6 +39,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.anythink.core.api.ATAdInfo;
+import com.anythink.core.api.AdError;
+import com.anythink.interstitial.api.ATInterstitial;
+import com.anythink.interstitial.api.ATInterstitialListener;
 import com.github.zackratos.ultimatebar.UltimateBar;
 import com.funlooper.magnifiermsy.camare.AnimSpring;
 import com.funlooper.magnifiermsy.camare.BitmapUtils;
@@ -159,6 +164,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private PackageReceiver packageReceiver;
 
     private long lastPictureShowTime = 0, lastFlashShowTime = 0, lastLensShowTime = 0, lastUnderShowTime = 0;
+
+    private ATInterstitial mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -445,7 +452,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if ((currentLensShowTime - lastLensShowTime) / 1000 > 30) {
                     lastLensShowTime = currentLensShowTime;
                     //todo 1-4-内部广告位逻辑-点击镜头调整按钮
-
+                    loadAd();
                 }
             }
             AnimSpring.getInstance(ivRoll).startRotateAnim(120, 360);
@@ -481,7 +488,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if ((currentFlashShowTime - lastFlashShowTime) / 1000 > 30) {
                 lastFlashShowTime = currentFlashShowTime;
                 //todo 1-3-内部广告位逻辑-点击手电筒按钮
-
+                loadAd();
             }
 
         }
@@ -505,8 +512,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if ((currentPictureShowTime - lastPictureShowTime) / 1000 >= 30) {
             lastPictureShowTime = currentPictureShowTime;
             //todo 1-2-内部广告位逻辑-进入相册
-
-
+            FirebaseAnalyticsManager.getInstance().init(MainActivity.this)
+                    .logEvent(FirebaseAnalyticsManager.PICTURE);
+            loadAd();
         }
 
     }
@@ -761,5 +769,79 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+    }
+
+
+    private void loadAd() {
+        if (mInterstitialAd == null) {
+            mInterstitialAd = new ATInterstitial(this, "b6364fcd149568");
+            mInterstitialAd.setAdListener(new ATInterstitialListener() {
+                @Override
+                public void onInterstitialAdLoaded() {
+                    showAd();
+                }
+
+                @Override
+                public void onInterstitialAdLoadFail(AdError adError) {
+                    //注意：禁止在此回调中执行广告的加载方法进行重试，否则会引起很多无用请求且可能会导致应用卡顿
+                    //AdError，请参考 https://docs.toponad.com/#/zh-cn/android/android_doc/android_test?id=aderror
+                    Log.e("Main", "onInterstitialAdLoadFail:" + adError.getFullErrorInfo());
+                }
+
+                @Override
+                public void onInterstitialAdClicked(ATAdInfo atAdInfo) {
+                }
+
+                @Override
+                public void onInterstitialAdShow(ATAdInfo atAdInfo) {
+                    Log.e("main", "onInterstitialAdShow");
+                }
+
+                @Override
+                public void onInterstitialAdClose(ATAdInfo atAdInfo) {
+                    Log.e("main", "onInterstitialAdClose");
+                    //ATAdInfo可区分广告平台以及获取广告平台的广告位ID等
+                    //请参考 https://docs.toponad.com/#/zh-cn/android/android_doc/android_sdk_callback_access?id=callback_info
+
+                }
+
+                @Override
+                public void onInterstitialAdVideoStart(ATAdInfo atAdInfo) {
+                    Log.e("main", "onInterstitialAdVideoStart");
+                    //建议在此回调中调用load进行广告的加载，方便下一次广告的展示（不需要调用isAdReady()）
+                    mInterstitialAd.load();
+                }
+
+                @Override
+                public void onInterstitialAdVideoEnd(ATAdInfo atAdInfo) {
+                    Log.e("main", "onInterstitialAdVideoEnd");
+                }
+
+                @Override
+                public void onInterstitialAdVideoError(AdError adError) {
+                    //AdError，请参考 https://docs.toponad.com/#/zh-cn/android/android_doc/android_test?id=aderror
+                    Log.e("main", "onInterstitialAdVideoError:" + adError.getFullErrorInfo());
+                }
+            });
+        }
+
+        mInterstitialAd.load();
+    }
+
+    private void showAd() {
+        FirebaseAnalyticsManager.getInstance().init(MainActivity.this)
+                .logEvent(FirebaseAnalyticsManager.SHOW_INSERT_ALL);
+   /*
+     为了统计场景到达率，相关信息可查阅 "https://docs.toponad.com/#/zh-cn/android/NetworkAccess/scenario/scenario"
+     在满足广告触发条件时调用“进入广告场景”方法，比如：
+     ** 广告场景是在清理结束后弹出广告，则在清理结束时调用；
+     * 1、先调用 "entryAdScenario"
+     * 2、在调用 "isAdReady" 是否可展示
+     * 3、最后调用 "show" 展示
+     */
+        ATInterstitial.entryAdScenario("b6364fcd149568", "f5e54937b0483d");
+        if (mInterstitialAd.isAdReady()) {
+            mInterstitialAd.show(this);
+        }
     }
 }

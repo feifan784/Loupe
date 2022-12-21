@@ -1,4 +1,4 @@
-package com.loupe.project;
+package com.funlooper.magnifiermsy;
 
 import android.app.Activity;
 import android.app.Application;

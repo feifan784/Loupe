@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "20573089062",
+    "project_id": "magnifier-and-flashlight-e66c3",
+    "storage_bucket": "magnifier-and-flashlight-e66c3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:20573089062:android:6d1e2f54be44ba274aa5e7",
+        "android_client_info": {
+          "package_name": "com.funlooper.magnifiermsy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "20573089062-3fdvn7gqjnf4f3p0ugpdsaqj4vv5e2m4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgOjIn39GicKf6Xd_4zqRMNVlXKNXkzP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "20573089062-3fdvn7gqjnf4f3p0ugpdsaqj4vv5e2m4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

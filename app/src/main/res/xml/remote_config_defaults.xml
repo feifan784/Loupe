@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?><!-- START xml_defaults -->
+<defaultsMap>
+    <!--进入播放页展示的广告类型，2代表插屏广告，3代表激励广告-->
+    <entry>
+        <key>Ads_Enter_Video</key>
+        <value>2</value>
+    </entry>
+
+    <!--播放视频过程中展示的广告类型，2代表插屏广告，3代表激励广告-->
+    <entry>
+        <key>Ads_Play_Video</key>
+        <value>2</value>
+    </entry>
+
+    <!--热启动应用展示的广告类型，2代表插屏广告，3代表激励广告-->
+    <entry>
+        <key>Ads_Hot_Open</key>
+        <value>2</value>
+    </entry>
+    <!--播放时间每达到X秒后就弹出广告，默认600秒-->
+    <entry>
+        <key>Play_Video_Gap_Time</key>
+        <value>600</value>
+    </entry>
+    <!--热启动前的离开时间达到X秒后就弹出广告，默认60秒-->
+    <entry>
+        <key>Hot_Open_Gap_Time</key>
+        <value>60</value>
+    </entry>
+    <!--  支持在这个字段的Value名称填写任意值，
+    用户获取到这个在线参数后，以Key_Value的格式，
+    将事件上报给Firebase，例如：UserGroup_0  -->
+    <entry>
+        <key>UserGroup</key>
+        <value>0</value>
+    </entry>
+
+    <!--等待页最长等待时间-->
+    <entry>
+        <key>Cold_Open_Wait_Time</key>
+        <value>10</value>
+    </entry>
+    <!--控制 伪装页面显示:配置0代表审核状态，1代表过审后的状态
+    0展示伪装页面-->
+    <entry>
+        <key>gp_online_mode</key>
+        <value>0</value>
+    </entry>
+
+</defaultsMap><!-- END xml_defaults -->

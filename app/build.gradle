@@ -1,11 +1,13 @@
-apply plugin: 'com.android.application'
-
+plugins {
+    id("com.android.application")
+    id 'com.google.gms.google-services'
+}
 android {
     compileSdkVersion 32
     buildToolsVersion "30.0.3"
     defaultConfig {
         applicationId "com.funlooper.magnifiermsy"
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion 32
         versionCode 1
         versionName "1.0"
@@ -21,6 +23,13 @@ android {
         checkReleaseBuilds false
         abortOnError false
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+//    kotlinOptions {
+//        jvmTarget = '1.8'
+//    }
 }
 
 dependencies {
@@ -134,4 +143,11 @@ dependencies {
     //<!-- max聚合mtg和unityads的adapter依赖 -->
     api "com.applovin.mediation:unityads-adapter:4.4.0.0"
     api "com.applovin.mediation:mintegral-adapter:16.2.61.1"
+
+//    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation platform('com.google.firebase:firebase-bom:31.1.1')
+    implementation 'com.google.firebase:firebase-config'
+    implementation 'com.google.firebase:firebase-analytics'
+//    implementation 'com.google.firebase:firebase-auth'
+//    implementation 'com.google.firebase:firebase-firestore'
 }
